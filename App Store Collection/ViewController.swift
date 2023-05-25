@@ -16,23 +16,26 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         title = "App Store"
         setupCollectionView()
     }
+    override func viewDidLayoutSubviews() {
+        let layoutItemHeight: CGFloat = 400
+        let verticalInsets = (collectionView.frame.height - layoutItemHeight) / 2
+        collectionView.contentInset = UIEdgeInsets(top: verticalInsets, left: collectionView.layoutMargins.left, bottom: verticalInsets, right: collectionView.layoutMargins.right)
+        
+    }
     
     func setupCollectionView() {
         let layout = CenterCellFlowLayout()
         layout.itemSize = CGSize(width: view.bounds.width * 2 / 3, height: 400)
         
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
-        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .white
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: CustomCollectionViewCell.identifier)
         collectionView.decelerationRate = .fast 
         collectionView.showsHorizontalScrollIndicator = false
-        
-        let verticalInsets = (collectionView.frame.height - layout.itemSize.height) / 2
-        collectionView.contentInset = UIEdgeInsets(top: verticalInsets, left: view.layoutMargins.left, bottom: verticalInsets, right: view.layoutMargins.right)
-        
+
         view.addSubview(collectionView)
     }
     
@@ -42,7 +45,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCollectionViewCell.identifier, for: indexPath) as! CustomCollectionViewCell
-        cell.labelText.text = "\(indexPath.row - 1) cell"
+        cell.labelText.text = "\(indexPath.row) cell"
         return cell
     }
     
@@ -51,8 +54,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
         let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
         var offset = targetContentOffset.pointee
         let index = round((offset.x + collectionView.contentInset.left) / cellWidthIncludingSpacing)
-        
-        offset = CGPoint(x: index * cellWidthIncludingSpacing - collectionView.contentInset.left - collectionView.layoutMargins.left, y: -collectionView.contentInset.top)
+        offset = CGPoint(x: index * cellWidthIncludingSpacing - collectionView.layoutMargins.left, y: -collectionView.contentInset.top)
         targetContentOffset.pointee = offset
     }
 
@@ -60,6 +62,7 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
 
 class CustomCollectionViewCell: UICollectionViewCell {
     static let identifier = "CustomCell"
+    
     var labelText = UILabel()
     
     override init(frame: CGRect) {
@@ -67,7 +70,9 @@ class CustomCollectionViewCell: UICollectionViewCell {
         backgroundColor = .systemGray4.withAlphaComponent(0.4)
         layer.cornerRadius = 10
         layer.cornerCurve = .continuous
-        labelText.frame = CGRect(x: contentView.frame.midX - 40, y: contentView.frame.midY - 30, width: 100, height: 60)
+        labelText.frame = CGRect(x: 0, y: 0, width: 100, height: 60)
+        labelText.center.x = contentView.frame.midX
+        labelText.center.y = contentView.frame.midY
         labelText.textAlignment = .center
         labelText.text = "cell"
         labelText.font = .boldSystemFont(ofSize: 14)
