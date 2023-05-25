@@ -75,9 +75,11 @@ class CustomCollectionViewCell: UICollectionViewCell {
         labelText.center.y = contentView.frame.midY
         labelText.textAlignment = .center
         labelText.text = "cell"
-        labelText.font = .boldSystemFont(ofSize: 14)
+        labelText.font = .boldSystemFont(ofSize: 34)
         labelText.textColor = .black
         contentView.addSubview(labelText)
+       
+//        contentView.layer.shadow
     }
     
     required init?(coder: NSCoder) {
