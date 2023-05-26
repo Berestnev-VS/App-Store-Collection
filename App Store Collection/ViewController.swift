@@ -51,10 +51,10 @@ class CustomCollectionViewController: UIViewController, UICollectionViewDelegate
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
+        let cellWidthSpacing = layout.itemSize.width + layout.minimumLineSpacing
         var offset = targetContentOffset.pointee
-        let index = round((offset.x + collectionView.contentInset.left) / cellWidthIncludingSpacing)
-        offset = CGPoint(x: index * cellWidthIncludingSpacing - collectionView.layoutMargins.left, y: -collectionView.contentInset.top)
+        let index = round((offset.x + collectionView.contentInset.left) / cellWidthSpacing)
+        offset = CGPoint(x: index * cellWidthSpacing - collectionView.layoutMargins.left - layout.minimumLineSpacing, y: -collectionView.contentInset.top)
         targetContentOffset.pointee = offset
     }
 
@@ -78,8 +78,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
         labelText.font = .boldSystemFont(ofSize: 34)
         labelText.textColor = .black
         contentView.addSubview(labelText)
-       
-//        contentView.layer.shadow
     }
     
     required init?(coder: NSCoder) {
